@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setJsonData } from './redux/locationSlice';
+import Dropdown from './components/Dropdown';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetch(`./task.json?_=${new Date().getTime()}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data); // Log actual data, not the promise
+        dispatch(setJsonData(data));
+      })
+      .catch(error => {
+        console.log("Error fetching the JSON:", error);
+      });
+  }, [dispatch]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Dropdown />
     </div>
   );
 }
